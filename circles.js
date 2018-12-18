@@ -37,9 +37,9 @@ define([], function () {
         pm.animate = function(iter) {
 
             iter += 1;
-            var iter_x = Math.sin(iter/2000) * 100;
+            var iter_x = Math.sin(iter/1000) * 100;
             var iter_y = Math.sin(iter/2000) * 100;
-            var iter_cycle = Math.sin(iter/100) * 100;
+            var iter_cycle = Math.cos(iter/3000)*50 + Math.sin(iter/600) * 20 + Math.sin(iter/100) * 100;
 
             window.requestAnimationFrame(function() {
 
@@ -47,7 +47,7 @@ define([], function () {
                     x: iter_x,
                     y: iter_y,
                 }
-                pm.disrupt(pos, iter);
+                pm.disrupt(pos, iter_cycle);
             
                 pm.render();
                 if(pm.animating == true) {
