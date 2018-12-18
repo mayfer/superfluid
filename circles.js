@@ -21,7 +21,6 @@ define([], function () {
         
         pm.render = function() {
             pm.reset();
-            //ctx.fillStyle = '#a00';
 
             for(var i=0; i<pm.circles.length; i++) {
                 var circle = pm.circles[i];
@@ -30,6 +29,8 @@ define([], function () {
                 var opacity = distance/circle.radius;
                 ctx.arc(circle.center.x, circle.center.y, (circle.radius), 0, Math.PI*2, false);
                 ctx.fill();
+
+                //ctx.fillStyle = 'rgba(0, 250, 000, '+(0.5+opacity)+')';
             }
         };
 
@@ -38,6 +39,7 @@ define([], function () {
             iter += 1;
             var iter_x = Math.sin(iter/2000) * 100;
             var iter_y = Math.sin(iter/2000) * 100;
+            var iter_cycle = Math.sin(iter/100) * 100;
 
             window.requestAnimationFrame(function() {
 
@@ -52,6 +54,8 @@ define([], function () {
                     pm.animate(iter);
                 }
             });
+
+            pm.iter = iter;
         };
 
         pm.stop = function() {
@@ -59,13 +63,14 @@ define([], function () {
         };
 
 
-        pm.circle = function(center, radius) {
+        pm.circle = function(center, radius, layer) {
             this.center = center;
             this.original_center = {
                 x: center.x,
                 y: center.y,
             };
             this.radius = radius;
+            this.layer = layer;
         };
 
         pm.resize = function() {
@@ -84,12 +89,12 @@ define([], function () {
                 x: ctx.width/2,
                 y: ctx.height/2,
             };
-            for(i = 0; i<pm.middle.y; i+=10) {
+            for(i = 0; i<pm.middle.y-30; i+=10) {
                 for(rad = 0; rad<=Math.PI*2; rad+=Math.PI/i*4) {
                     var circle = new pm.circle({
                         x: pm.middle.x + i* Math.sin(rad+i),
                         y: pm.middle.y + i* Math.cos(rad+i),
-                    }, 4, 0, 2*Math.PI);
+                    }, 4, i);
                     pm.circles.push(circle);
                 }
             }
@@ -130,6 +135,8 @@ define([], function () {
             pm.resize();
             pm.reset();
 
+            pm.ctx.fillStyle = '#000';
+            
             var getCoordinates = function(that, e) {
                 if(e && e.changedTouches && e.changedTouches[0]) {
                     e = e.changedTouches[0];
@@ -165,6 +172,17 @@ define([], function () {
             elem.addEventListener('mousemove', hoverOrTouchMove);
             elem.addEventListener('mouseout', mouseout);
             elem.addEventListener('touchend', mouseout);
+
+            document.addEventListener('keydown', function(e){
+                if(e.keyCode == 32) {
+                    if(pm.animating) {
+                        pm.stop();
+                    } else {
+                        pm.animating = true;
+                        pm.animate(pm.iter);
+                    }
+                }
+            });
 
             if(pm.options.resizeWithWindow === true) {
                 var resizeHandler;
