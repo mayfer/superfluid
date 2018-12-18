@@ -89,7 +89,9 @@ define([], function () {
                 x: ctx.width/2,
                 y: ctx.height/2,
             };
-            for(i = 0; i<pm.middle.y-30; i+=10) {
+            var maxlen = Math.min(pm.middle.y, pm.middle.x);
+            
+            for(i = 0; i<maxlen-30; i+=10) {
                 for(rad = 0; rad<=Math.PI*2; rad+=Math.PI/i*4) {
                     var circle = new pm.circle({
                         x: pm.middle.x + i* Math.sin(rad+i),
