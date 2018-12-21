@@ -9,7 +9,7 @@ define([], function () {
 
         if(options === undefined) { options = {}; }
         pm.options = extend({
-            resizeWithWindow: true,
+            resizeWithWindow: false,
         }, options);
 
         pm.hover = function(percent) {
@@ -37,9 +37,10 @@ define([], function () {
         pm.animate = function(iter) {
 
             iter += 1;
-            var iter_x = Math.sin(iter/1000) * 100;
-            var iter_y = Math.sin(iter/2000) * 100 + Math.cos(iter/200 + iter/6000) * 100;
-            var iter_cycle = Math.cos(iter/3000)*50 + Math.sin(iter/600) * 20 + Math.sin(iter/100) * 100;
+            var iter_x = Math.sin(iter/2000) * 100;
+            var iter_y = Math.sin(iter/2000) * 100;
+
+            //var iter_cycle = Math.cos(iter/3000)*50 + Math.sin(iter/600) * 20 + Math.sin(iter/100) * 100;
 
             window.requestAnimationFrame(function() {
 
@@ -47,7 +48,7 @@ define([], function () {
                     x: iter_x,
                     y: iter_y,
                 }
-                pm.disrupt(pos, iter_cycle);
+                pm.disrupt(pos, iter);
             
                 pm.render();
                 if(pm.animating == true) {
@@ -91,12 +92,12 @@ define([], function () {
             };
             var maxlen = Math.min(pm.middle.y, pm.middle.x);
             
-            for(i = 0; i<maxlen-30; i+=10) {
-                for(rad = 0; rad<=Math.PI*2; rad+=Math.PI/i*4) {
+            for(i = 0; i<maxlen-10; i+=10) {
+                for(rad = 0; rad<Math.PI*2; rad+=Math.PI/i*4) {
                     var circle = new pm.circle({
                         x: pm.middle.x + i* Math.sin(rad+i),
                         y: pm.middle.y + i* Math.cos(rad+i),
-                    }, 4, i);
+                    }, 4.2, i);
                     pm.circles.push(circle);
                 }
             }
@@ -122,8 +123,8 @@ define([], function () {
                     y: Math.sin(circle.original_center.y * iter/10000 + i/1000)*5,
                 }
                 var distance = pm.distance(pos, compare);
-                var push_x = Math.sin(distance)*5;
-                var push_y = Math.cos(distance)*5;
+                var push_x = Math.sin(distance)*3;
+                var push_y = Math.cos(distance)*3;
 
                 circle.center.y = circle.original_center.y - push_y;
                 circle.center.x = circle.original_center.x - push_x;
