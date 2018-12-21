@@ -36,10 +36,10 @@ define([], function () {
 
         pm.animate = function(iter) {
 
-            iter += 1;
-            var iter_x = Math.sin(iter/1000) * 100;
-            var iter_y = Math.sin(iter/2000) * 100 + Math.cos(iter/200 + iter/6000) * 100;
-            var iter_cycle = Math.cos(iter/3000)*50 + Math.sin(iter/600) * 20 + Math.sin(iter/100) * 100;
+            iter += 3;
+            var iter_x = Math.sin(iter/2007) * 100 + Math.cos(Math.PI/3 + iter/2000)*50;
+            var iter_y = Math.sin(iter/4040) * 100 + Math.cos(iter/2100 + iter/6300) * 100;
+            var iter_cycle = Math.cos(iter/2830)*50 + Math.sin(iter/2300) * 20 + Math.sin(iter/1000) * 100;
 
             window.requestAnimationFrame(function() {
 
@@ -89,10 +89,10 @@ define([], function () {
                 x: ctx.width/2,
                 y: ctx.height/2,
             };
-            var maxlen = Math.min(pm.middle.y, pm.middle.x);
+            var maxlen = Math.min(pm.middle.y, pm.middle.x); 
             
             for(i = 0; i<maxlen-30; i+=10) {
-                for(rad = 0; rad<=Math.PI*2; rad+=Math.PI/i*4) {
+                for(rad = 0; rad<Math.PI*2-0.01; rad+=Math.PI/i*4) {
                     var circle = new pm.circle({
                         x: pm.middle.x + i* Math.sin(rad+i),
                         y: pm.middle.y + i* Math.cos(rad+i),
@@ -122,8 +122,8 @@ define([], function () {
                     y: Math.sin(circle.original_center.y * iter/10000 + i/1000)*5,
                 }
                 var distance = pm.distance(pos, compare);
-                var push_x = Math.sin(distance)*5;
-                var push_y = Math.cos(distance)*5;
+                var push_x = Math.sin(distance)*4;
+                var push_y = Math.cos(distance)*4;
 
                 circle.center.y = circle.original_center.y - push_y;
                 circle.center.x = circle.original_center.x - push_x;
@@ -138,7 +138,7 @@ define([], function () {
             pm.reset();
 
             pm.ctx.fillStyle = '#000';
-            
+
             var getCoordinates = function(that, e) {
                 if(e && e.changedTouches && e.changedTouches[0]) {
                     e = e.changedTouches[0];

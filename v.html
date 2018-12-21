@@ -39,8 +39,15 @@
                 height: 100%;
                 width: 100%;
             }
+            #square {
+                margin: 0 auto;
+                position: relative;
+            }
 
             .dots { background: #000; }
+
+            .swimteam { width: 10%; position: absolute; top: 5%; left: 5%; }
+            .v { width: 10%; position: absolute; right: 5%; bottom: 5%; }
 
             a {
                 font-size: 20px;
@@ -51,8 +58,12 @@
     </head>
     <body>
         <div id="wrapper">
-            <div id="main">
-                
+            <div id="square">
+                <div id="main">
+                    
+                </div>
+                <img class='swimteam' src='./assets/swimteam.svg' />
+                <img class='v' src='./assets/v.svg' />
             </div>
         </div>
         <script>
@@ -82,6 +93,10 @@
 
             $(document).ready(function(){
                  window.app = null;
+
+                var maxlenpx = Math.min($('#wrapper').height(), $('#wrapper').width());
+                $('#square').css('width', parseInt(maxlenpx)+"px");
+                $('#square').css('height', parseInt(maxlenpx)+"px");
 
                 loadapp('circles');
 
