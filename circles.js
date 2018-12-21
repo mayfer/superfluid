@@ -38,7 +38,7 @@ define([], function () {
 
             iter += 1;
             var iter_x = Math.sin(iter/1000) * 100;
-            var iter_y = Math.sin(iter/2000) * 100;
+            var iter_y = Math.sin(iter/2000) * 100 + Math.cos(iter/200 + iter/6000) * 100;
             var iter_cycle = Math.cos(iter/3000)*50 + Math.sin(iter/600) * 20 + Math.sin(iter/100) * 100;
 
             window.requestAnimationFrame(function() {
@@ -122,8 +122,8 @@ define([], function () {
                     y: Math.sin(circle.original_center.y * iter/10000 + i/1000)*5,
                 }
                 var distance = pm.distance(pos, compare);
-                var push_x = Math.sin(distance)*3;
-                var push_y = Math.cos(distance)*3;
+                var push_x = Math.sin(distance)*5;
+                var push_y = Math.cos(distance)*5;
 
                 circle.center.y = circle.original_center.y - push_y;
                 circle.center.x = circle.original_center.x - push_x;
