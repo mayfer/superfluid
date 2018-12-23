@@ -93,14 +93,17 @@ define([], function () {
             };
             var maxlen = Math.min(pm.middle.y, pm.middle.x); 
             
+            pm.maxlayer = 0;
             for(i = 0; i<maxlen-30; i+=10) {
                 for(rad = 0; rad<Math.PI*2-0.01; rad+=Math.PI/i*4) {
                     var circle = new pm.circle({
                         x: pm.middle.x + i* Math.sin(rad+i),
                         y: pm.middle.y + i* Math.cos(rad+i),
-                    }, 4, i);
+                    }, 4, pm.maxlayer);
                     pm.circles.push(circle);
                 }
+
+                pm.maxlayer += 1;
             }
 
         };
@@ -124,8 +127,8 @@ define([], function () {
                     y: Math.sin(circle.original_center.y * iter/10000 + i/1000)*5,
                 }
                 var distance = pm.distance(pos, compare);
-                var push_x = Math.sin(distance)*3;
-                var push_y = Math.cos(distance)*3;
+                var push_x = Math.sin(distance)*3 * (0.5+Math.abs( Math.abs(Math.sin(iter/5)) - ( circle.layer / pm.maxlayer)));
+                var push_y = Math.cos(distance)*3 * (0.5+Math.abs( Math.abs(Math.sin(iter/5)) - ( circle.layer / pm.maxlayer)));
 
                 circle.center.y = circle.original_center.y - push_y;
                 circle.center.x = circle.original_center.x - push_x;
@@ -163,7 +166,7 @@ define([], function () {
             };
 
             var hoverOrTouchMove = function(e) {
-                var pos = getCoordinates(this, e);
+                //var pos = getCoordinates(this, e);
                 //pm.disrupt(pos);
                 //pm.animating = false;
             };
