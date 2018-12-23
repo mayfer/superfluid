@@ -37,9 +37,12 @@ define([], function () {
         pm.animate = function(iter) {
 
             iter += 3;
-            var iter_x = Math.sin(iter/2007) * 100 + Math.cos(Math.PI/3 + iter/2000)*50;
-            var iter_y = Math.sin(iter/4040) * 100 + Math.cos(iter/2100 + iter/6300) * 100;
-            var iter_cycle = Math.cos(iter/2830)*50 + Math.sin(iter/2300) * 20 + Math.sin(iter/1000) * 100;
+            var iter_x = Math.sin(iter/407) * 100 + Math.cos(Math.PI/3 + iter/200)*50;
+            var iter_y = Math.sin(iter/540) * 100 + Math.cos(Math.PI/6 + iter/2700) * 50;
+            var iter_cycle = 5 + Math.cos(iter/2830)*50 + Math.sin(iter/6300) * 20 + Math.sin(iter/1000) * 100;
+
+            pm.iter_trig = iter_cycle;
+            pm.iter = iter;
 
             window.requestAnimationFrame(function() {
 
@@ -47,15 +50,14 @@ define([], function () {
                     x: iter_x,
                     y: iter_y,
                 }
-                pm.disrupt(pos, iter_cycle);
+                pm.disrupt(pos, pm.iter_trig);
             
                 pm.render();
                 if(pm.animating == true) {
-                    pm.animate(iter);
+                    pm.animate(pm.iter);
                 }
             });
 
-            pm.iter = iter;
         };
 
         pm.stop = function() {
@@ -122,8 +124,8 @@ define([], function () {
                     y: Math.sin(circle.original_center.y * iter/10000 + i/1000)*5,
                 }
                 var distance = pm.distance(pos, compare);
-                var push_x = Math.sin(distance)*4;
-                var push_y = Math.cos(distance)*4;
+                var push_x = Math.sin(distance)*3;
+                var push_y = Math.cos(distance)*3;
 
                 circle.center.y = circle.original_center.y - push_y;
                 circle.center.x = circle.original_center.x - push_x;
@@ -198,6 +200,7 @@ define([], function () {
             }
 
             pm.iter = 0;
+            pm.iter_trig = 0;
             pm.animating = true;
             pm.animate(pm.iter);
         };
