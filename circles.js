@@ -81,10 +81,6 @@ define([], function () {
 
             pm.circles = [];
 
-            canvasText = document.createElement("canvas");
-            canvasText.width = ctx.width;
-            canvasText.height = ctx.height;
-
             pm.middle = {
                 x: ctx.width/2,
                 y: ctx.height/2,
@@ -175,14 +171,12 @@ define([], function () {
             elem.addEventListener('mouseout', mouseout);
             elem.addEventListener('touchend', mouseout);
 
-            document.addEventListener('keydown', function(e){
-                if(e.keyCode == 32) {
-                    if(pm.animating) {
-                        pm.stop();
-                    } else {
-                        pm.animating = true;
-                        pm.animate(pm.iter);
-                    }
+            $(document).on('click', '#frame', function(e){
+                if(pm.animating) {
+                    pm.stop();
+                } else {
+                    pm.animating = true;
+                    pm.animate(pm.iter);
                 }
             });
 
