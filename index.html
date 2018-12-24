@@ -64,6 +64,12 @@
             #tracks .track.playing { font-weight: bold; border-bottom: 1px solid #a00; background-shadow: 0 0 3px 0 red; }
             #tracks .track.playing:before { content: "‖"; width: 30px; height: 30px; text-align: center; position: absolute; left: -80px; top: -1px; }
             #tracks .track.paused:before { content: "▶"; width: 30px; height: 30px; text-align: center; position: absolute; left: -80px; top: -1px; }
+
+            @media screen and (max-width: 600px){
+                #main {
+                    top: 20px; bottom: 20px; left: 20px; right: 20px;
+                }
+            }
         </style>
     </head>
     <body>
