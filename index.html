@@ -20,6 +20,7 @@
                 width: 100%;
                 height: 100%;
                 background: #fff;
+                font-family: monospace;
             }
 
             #wrapper {
@@ -47,17 +48,20 @@
             .swimteam { width: 7%; position: absolute; top: 7%; left: 7%; }
             .v { width: 10%; position: absolute; right: 5%; bottom: 5%; }
 
-            a {
-                font-size: 20px;
-                color: #000;
+
+            #tracks { display: none; font-size: 17px; font-family: 'Major Mono Display', monospace;   }
+            #tracks ol { margin: 0 70px; padding: 0; font-weight: bold;  }
+            #tracks.bottom { display: block; position: relative; margin: 0 10%; padding-bottom: 100px; }
+
+
+            #tracks.right {
+                position: absolute; top: 0; left: 50%; right: 0; height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
-
-            #tracks { display: none; width: 180px; font-weight: bold; font-size: 17px; }
-            #tracks.right { display: block; position: absolute; top: 50%; left: 70%; margin: 10px;  margin-top: -230px; }
-            #tracks.bottom { display: block; position: relative; margin: 0 auto; padding-bottom: 100px; }
-
-            #tracks .track { position: relative; cursor: pointer; margin: 20px 0; padding: 0;  font-family: 'Major Mono Display', monospace; border-bottom: 1px solid #ddd; width: 100%;  }
+            #tracks .track { position: relative; cursor: pointer; margin: 20px 0; padding: 0; border-bottom: 1px solid #ddd; min-width: 220px; }
             #tracks .track:hover { border-bottom: 1px solid #000; }
             #tracks .duration { color: #aaa; float: right; font-size: 10px; }
             #tracks .track.loading:after { content: " loading..."; position: absolute; bottom: -13px; left: 0px; font-size: 11px; color: #a00; }
@@ -69,10 +73,50 @@
                 #main {
                     top: 20px; bottom: 20px; left: 20px; right: 20px;
                 }
+                #tracks .track { min-width: 160px; }
             }
+
+            #tracks .more {  margin-top: 30px; line-height: 30px; }
+            #tracks .more a { display: block; color: #ccc; text-decoration: none; }
+            #tracks .icon { display: inline-block; width: 51px; text-align: right; margin-right: 7px; letter-spacing: 2px; }
+            #tracks .download { }
+            #tracks .download:hover { color: #0a0; cursor: pointer; }
+            #tracks .info:hover { color: #00a; cursor: pointer; }
+            #tracks .contact:hover { color: #950; cursor: pointer; }
+
+            #info {
+                display: none;
+                font-family: sans-serif;
+                color: #333;
+                position: fixed;
+                background: rgba(0, 0, 0, 0.1);
+                top: 0; left: 0; height: 100%; width: 100%;
+            }
+            #info:target {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            #info .inner {
+                padding: 50px;
+                border-radius: 10px;
+                background: #fff;
+                width: 300px;
+            }
+            #info .inner p {
+                margin: 0 0 15px 0;
+            }
+            #info a {
+                font-weight: bold;
+                display: block;
+                text-align: center;
+                    color: #000;
+            }
+
         </style>
     </head>
     <body>
+        </div>
         <div id="wrapper">
             <div id="square">
                 <div id="main">
@@ -81,7 +125,33 @@
                     <img class='v' src='./assets/v.svg?' />
                 </div>
             </div>
-            <ol id="tracks"></ol>
+            <div id="tracks">
+                <div class='inner'>
+                    <ol></ol>
+                    <div class='more'>
+                        <a class='download' href='https://s3.amazonaws.com/swim-team/Swim+Team+-+V.zip'>
+                            <span class='icon'>&#8681;.</span> download
+                        </a>
+                        <a class='info' href='#info'>
+                            <span class='icon'>ⓘ.</span> info
+                        </a>
+                        <a class='contact' href='mailto:swim.team.van@gmail.com'>
+                            <span class='icon'>&#9742;.</span> contact
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id='info'>
+                <div class='inner'>
+
+                    <div>
+                        <p>Swim Team is a rock trio from Vancouver, BC consisting of members Dorothy Neufeld, Murat Ayfer, and Nick Short.</p>
+                        <p>V is the third release, self-recorded and produced from sept 2018-oct 2019.</p>
+                        <p>Mastered by Jordan Koop.</p>
+                    </div>
+                    <a href='#'>close</a>
+                </div>
+            </div>
         </div>
         <script>
 
@@ -141,23 +211,53 @@
                 });
 
                 var tracks = [
-                    {title: 'Brick', id: 'brick', file: 'https://s3.amazonaws.com/swim-team/01+-+BRICK+(FINAL).m4a', duration: '3:18'},
-                    {title: 'X', id: 'x', file: 'https://s3.amazonaws.com/swim-team/02+-+X+(FINAL).m4a', duration: '2:58'},
-                    {title: 'Garden', id: 'garden', file: 'https://s3.amazonaws.com/swim-team/03+-+GARDEN+(FINAL).m4a', duration: '3:20'},
-                    {title: 'Empire', id: 'empire', file: 'https://s3.amazonaws.com/swim-team/04+-+EMPIRE+(FINAL).m4a', duration: '2:50'},
-                    {title: 'Rabbit', id: 'rabbit', file: 'https://s3.amazonaws.com/swim-team/05+-+RABBIT+(FINAL).m4a', duration: '2:57'},
-                    {title: 'Mango', id: 'mango', file: 'https://s3.amazonaws.com/swim-team/06+-+MANGO+(FINAL).m4a', duration: '2:41'},
-                    {title: 'Firefly', id: 'firefly', file: 'https://s3.amazonaws.com/swim-team/07+-+FIREFLY+(FINAL).m4a', duration: '3:11'},
-                    {title: 'Cardinal', id: 'cardinal', file: 'https://s3.amazonaws.com/swim-team/08+-+CARDINAL+(FINAL).m4a', duration: '3:06'},
-                    {title: 'V', id: 'v', file: 'https://s3.amazonaws.com/swim-team/09+-+V+(FINAL).m4a', duration: '5:03'},
-                    {title: 'Tendency', id: 'tendency', file: 'https://s3.amazonaws.com/swim-team/10+-+TENDENCY+(FINAL).m4a', duration: '3:10'},
+                    {title: 'Brick', id: 'brick', files: [
+                        //'https://s3.amazonaws.com/swim-team/01+-+Brick.m4a',
+                        'https://s3.amazonaws.com/swim-team/01+-+Brick.mp3',
+                    ], duration: '3:18'},
+                    {title: 'X', id: 'x', files: [
+                        //'https://s3.amazonaws.com/swim-team/02+-+X.m4a',
+                        'https://s3.amazonaws.com/swim-team/02+-+X.mp3',
+                    ], duration: '2:58'},
+                    {title: 'Garden', id: 'garden', files: [
+                        //'https://s3.amazonaws.com/swim-team/03+-+Garden.m4a',
+                        'https://s3.amazonaws.com/swim-team/03+-+Garden.mp3',
+                    ], duration: '3:20'},
+                    {title: 'Empire', id: 'empire', files: [
+                        //'https://s3.amazonaws.com/swim-team/04+-+Empire.m4a',
+                        'https://s3.amazonaws.com/swim-team/04+-+Empire.mp3',
+                    ], duration: '2:50'},
+                    {title: 'Rabbit', id: 'rabbit', files: [
+                        //'https://s3.amazonaws.com/swim-team/05+-+Rabbit.m4a',
+                        'https://s3.amazonaws.com/swim-team/05+-+Rabbit.mp3',
+                    ], duration: '2:57'},
+                    {title: 'Mango', id: 'mango', files: [
+                        //'https://s3.amazonaws.com/swim-team/06+-+Mango.m4a',
+                        'https://s3.amazonaws.com/swim-team/06+-+Mango.mp3',
+                    ], duration: '2:41'},
+                    {title: 'Firefly', id: 'firefly', files: [
+                        //'https://s3.amazonaws.com/swim-team/07+-+Firefly.m4a',
+                        'https://s3.amazonaws.com/swim-team/07+-+Firefly.mp3',
+                    ], duration: '3:11'},
+                    {title: 'Cardinal', id: 'cardinal', files: [
+                        //'https://s3.amazonaws.com/swim-team/08+-+Cardinal.m4a',
+                        'https://s3.amazonaws.com/swim-team/08+-+Cardinal.mp3',
+                    ], duration: '3:06'},
+                    {title: 'V', id: 'v', files: [
+                        //'https://s3.amazonaws.com/swim-team/09+-+V.m4a',
+                        'https://s3.amazonaws.com/swim-team/09+-+V.mp3',
+                    ], duration: '5:03'},
+                    {title: 'Tendency', id: 'tendency', files: [
+                        //'https://s3.amazonaws.com/swim-team/10+-+Tendency.m4a',
+                        'https://s3.amazonaws.com/swim-team/10+-+Tendency.mp3',
+                    ], duration: '3:10'},
                 ];
 
                 var sounds = {};
                 
                 tracks.forEach(function(track, index){
                     var sound = new Howl({
-                      src: [track.file],
+                      src: track.files,
                       preload: false,
                       html5: true,
                     });
@@ -195,7 +295,7 @@
                     sounds[track.id] = sound;
 
                     var trackdiv = $("<li class='track' id='"+track.id+"'>"+track.title+" <span class='duration'>"+track.duration+"</span></li>")
-                    $('#tracks').append(trackdiv);
+                    $('#tracks ol').append(trackdiv);
                 });
 
 
