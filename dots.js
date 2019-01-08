@@ -34,6 +34,65 @@ define([], function () {
             }
         };
 
+        pm.resize = function() {
+            pm.cells = [];
+
+            var size = 10;
+            var mid = size / 2;
+
+            pm.circles = [];
+
+            canvasText = document.createElement("canvas");
+            canvasText.width = ctx.width;
+            canvasText.height = ctx.height;
+
+            contextText = canvasText.getContext("2d");
+            contextText.font = "300px Helvetica";
+            contextText.fillStyle = "rgb(255, 0, 0)";
+            contextText.textAlign = "center";
+
+            var offset_x = 2;
+            contextText.fillText("teaorbit", ctx.width/2, ctx.height/2);
+            imageText = contextText.getImageData(0, 0, ctx.width, ctx.height);
+            dataText = imageText.data;
+
+            let skip = 14;
+            for(y = 0; y < ctx.height; y+=skip) {
+                for(x = 0; x < ctx.width; x+=skip) {
+                    var circle = new pm.circle({
+                        x: x,
+                        y: y,
+                        radius: 2.4,
+                    });
+                    pm.circles.push(circle);
+                }
+            }
+
+        };
+
+        pm.distance = function(pos1, pos2, iter) {
+            var diff = {
+                x: (pos1.x - pos2.x),
+                y: (pos1.y - pos2.y),
+            }
+
+            return Math.sin(diff.y) * Math.cos(diff.x) + Math.sin(diff.x*iter/300) + Math.sin(diff.y*iter/300);
+        }
+
+        pm.disrupt = function(pos, iter) {
+            for(var i=0; i<pm.circles.length; i++) {
+                var circle = pm.circles[i];
+                
+                var distance = pm.distance(pos, circle.original_center, iter);
+                var push_x = 1 + Math.sin(distance);
+                var push_y = 1 + Math.cos(distance);
+
+                circle.radius = Math.sin(distance)+1;
+            }
+            pm.render();
+            
+        };
+
         pm.animate = function(iter) {
 
             iter += 1;
@@ -69,79 +128,6 @@ define([], function () {
             };
             this.radius = options.radius;
             this.type = options.type;
-        };
-
-        pm.resize = function() {
-            pm.cells = [];
-
-            var size = 10;
-            var mid = size / 2;
-
-            pm.circles = [];
-
-            canvasText = document.createElement("canvas");
-            canvasText.width = ctx.width;
-            canvasText.height = ctx.height;
-
-            contextText = canvasText.getContext("2d");
-            contextText.font = "300px Helvetica";
-            contextText.fillStyle = "rgb(255, 0, 0)";
-            contextText.textAlign = "center";
-
-            var offset_x = 2;
-            contextText.fillText("teaorbit", ctx.width/2, ctx.height/2);
-            imageText = contextText.getImageData(0, 0, ctx.width, ctx.height);
-            dataText = imageText.data;
-
-            let skip = 14;
-            for(y = 0; y < ctx.height; y+=skip) {
-                for(x = 0; x < ctx.width; x+=skip) {
-                    if (true){//dataText[(x + y * ctx.width) * 4] > 0) {
-                        var circle = new pm.circle({
-                            type: 'inside',
-                            x: x,
-                            y: y,
-                            radius: 2.4,
-                        });
-                        pm.circles.push(circle);
-                    } else {
-                    
-                        var circle = new pm.circle({
-                            type: 'outside',
-                            x: x,
-                            y: y,
-                            radius: 1.4,
-                        });
-                        pm.circles.push(circle);
-                    }
-                }
-            }
-
-        };
-
-        pm.distance = function(pos1, pos2, iter) {
-            var diff = {
-                x: (pos1.x - pos2.x),
-                y: (pos1.y - pos2.y),
-            }
-
-            return Math.sin(diff.y) * Math.cos(diff.x) + Math.sin(diff.x*iter/300) + Math.sin(diff.y*iter/300);
-        }
-
-        pm.disrupt = function(pos, iter) {
-            for(var i=0; i<pm.circles.length; i++) {
-                var circle = pm.circles[i];
-                
-                var distance = pm.distance(pos, circle.original_center, iter);
-                var push_x = 1 + Math.sin(distance);
-                var push_y = 1 + Math.cos(distance);
-
-                circle.radius = Math.sin(distance)+1 + (circle.type == 'inside' ? 1 : 0);
-                //circle.center.x = circle.original_center.x + push_x;
-                //circle.center.y = circle.original_center.y + push_y;
-            }
-            pm.render();
-            
         };
 
         pm.init = function() {
