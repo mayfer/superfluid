@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png"/>
         <meta charset="utf-8" />
         <title>Swim Team &bull; V</title>
         <meta property="og:image" content="/assets/cover.png">
@@ -155,7 +155,7 @@
                         <a class='download' href='https://s3.amazonaws.com/swim-team/Swim+Team+-+V.zip'>
                             <span class='icon'>&#8681;.</span> download
                         </a>
-                        <a class='info' href='#info'>
+                        <a class='info'>
                             <span class='icon'>ⓘ.</span> info
                         </a>
                         <div class='expand'>
@@ -210,6 +210,7 @@
                 });
 
                 $('.info').on('click', function(e) {
+                    e.preventDefault();
                     $('.expand').toggle();
                 });
             });
