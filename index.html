@@ -45,7 +45,6 @@
 
             .dots { background: #000; }
             img { display: block; }
-            .swimteam { width: 7%; position: absolute; top: 7%; left: 7%; }
             .v { width: 10%; position: absolute; right: 5%; bottom: 5%; }
 
 
@@ -77,41 +76,41 @@
             }
 
             #tracks .more {  margin-top: 30px; line-height: 30px; }
-            #tracks .more a { display: block; color: #ccc; text-decoration: none; }
+            #tracks .more > a { display: block; color: #ccc; text-decoration: none; }
             #tracks .icon { display: inline-block; width: 52.5px; text-align: right; margin-right: 4px; letter-spacing: 2px; }
             #tracks .download { }
             #tracks .download:hover { color: #0a0; cursor: pointer; }
             #tracks .info:hover { color: #00a; cursor: pointer; }
             #tracks .contact:hover { color: #950; cursor: pointer; }
 
-            #info {
+            .expand {
                 display: none;
                 font-family: sans-serif;
-                color: #333;
-                position: fixed;
-                background: rgba(0, 0, 0, 0.1);
-                top: 0; left: 0; height: 100%; width: 100%;
+                color: #777;
+                font-size: 12px;
+                line-height: 17px;
+                max-width: 300px;
             }
-            #info:target {
-                display: flex;
-                align-items: center;
-                justify-content: center;
+            .expand p { margin: 5px 0 0 20px; }
+            .expand a { color: #333; }
+
+            #bandname {
+                position: absolute; top: 0; left: 0;
+                    cursor: pointer;
             }
-            #info .inner {
-                padding: 50px;
-                border-radius: 10px;
-                background: #fff;
-                width: 300px;
+            #bandname:hover svg * {
+                fill: #a00 !important;
             }
-            #info .inner p {
-                margin: 0 0 15px 0;
+            #bandname:active svg * {
+                fill: #00a !important;
             }
-            #info a {
-                font-weight: bold;
-                display: block;
-                text-align: center;
-                    color: #000;
+            #bandname:active  {
+                top: 1px; left: 1px;
             }
+            #bandname svg { height: 15px; padding: 10px; display: none;}
+
+            #bandname { font-family: 'Major Mono Display', monospace; color: #ccc; font-size: 20px; text-decoration: none; padding: 10px; }
+            #bandname:hover { color: #00f; }
 
         </style>
     </head>
@@ -121,7 +120,6 @@
             <div id="square">
                 <div id="main">
                     <div id="frame"></div>
-                    <img class='swimteam' src='./assets/swimteam.svg?' />
                     <img class='v' src='./assets/v.svg?' />
                 </div>
             </div>
@@ -135,23 +133,20 @@
                         <a class='info' href='#info'>
                             <span class='icon'>ⓘ.</span> info
                         </a>
-                        <a class='contact' href='mailto:swim.team.van@gmail.com'>
-                            <span class='icon'>&#9742;.</span> contact
-                        </a>
+                        <div class='expand'>
+                            <p>Swim Team is a rock trio from Vancouver, BC consisting of members Dorothy Neufeld, Murat Ayfer, and Nick Short.</p>
+                            <p>V is the third release, self-recorded and produced from Sept 2017 - Oct 2018.</p>
+                            <p>Mastered by Jordan Koop.</p>
+                            <p>Find us at <a href='mailto:swim.team.van@gmail.com'>swim.team.van@gmail.com</a> or <a href='http://swim-team.bandcamp.com'>Bandcamp</a></p>
+                            <p>2019 &copy; All rights reserved</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div id='info'>
-                <div class='inner'>
-
-                    <div>
-                        <p>Swim Team is a rock trio from Vancouver, BC consisting of members Dorothy Neufeld, Murat Ayfer, and Nick Short.</p>
-                        <p>V is the third release, self-recorded and produced from sept 2018-oct 2019.</p>
-                        <p>Mastered by Jordan Koop.</p>
-                    </div>
-                    <a href='#'>close</a>
-                </div>
-            </div>
+            <a id="bandname" href="">
+                swim team
+                <svg viewBox="0 0 276 41" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"><g><path d="M14.209,38.174c0.957,0 1.904,-0.132 2.842,-0.396c0.937,-0.263 1.777,-0.654 2.519,-1.172c0.742,-0.517 1.338,-1.152 1.787,-1.904c0.45,-0.752 0.674,-1.626 0.674,-2.622c0,-1.191 -0.307,-2.251 -0.923,-3.179c-0.615,-0.927 -1.42,-1.777 -2.417,-2.548c-0.996,-0.772 -2.133,-1.499 -3.413,-2.183c-1.279,-0.684 -2.583,-1.367 -3.911,-2.051c-1.328,-0.683 -2.632,-1.401 -3.911,-2.153c-1.279,-0.752 -2.417,-1.592 -3.413,-2.52c-0.996,-0.927 -1.802,-1.963 -2.417,-3.105c-0.615,-1.143 -0.923,-2.456 -0.923,-3.941c0,-1.484 0.278,-2.861 0.835,-4.13c0.557,-1.27 1.372,-2.369 2.446,-3.296c1.075,-0.928 2.398,-1.656 3.97,-2.183c1.572,-0.527 3.374,-0.791 5.405,-0.791c1.836,0 3.477,0.195 4.922,0.586c1.446,0.391 2.715,0.967 3.809,1.728c1.094,0.762 2.021,1.7 2.783,2.813c0.762,1.113 1.377,2.402 1.846,3.867l-3.34,1.524c-0.391,-1.192 -0.889,-2.281 -1.494,-3.267c-0.606,-0.986 -1.328,-1.831 -2.168,-2.534c-0.84,-0.703 -1.812,-1.245 -2.915,-1.626c-1.104,-0.381 -2.349,-0.571 -3.736,-0.571c-1.23,0 -2.304,0.17 -3.222,0.512c-0.918,0.342 -1.685,0.791 -2.3,1.348c-0.615,0.557 -1.074,1.182 -1.377,1.875c-0.303,0.693 -0.454,1.401 -0.454,2.124c0,1.016 0.312,1.948 0.937,2.798c0.625,0.849 1.455,1.65 2.491,2.402c1.035,0.752 2.212,1.48 3.53,2.183c1.318,0.703 2.661,1.416 4.028,2.138c1.367,0.723 2.71,1.475 4.029,2.256c1.318,0.782 2.495,1.636 3.53,2.564c1.035,0.927 1.865,1.943 2.49,3.047c0.625,1.103 0.938,2.338 0.938,3.706c0,1.543 -0.293,2.993 -0.879,4.35c-0.586,1.358 -1.465,2.539 -2.637,3.545c-1.172,1.006 -2.627,1.802 -4.365,2.388c-1.739,0.586 -3.76,0.879 -6.065,0.879c-1.875,0 -3.545,-0.205 -5.01,-0.615c-1.464,-0.411 -2.758,-1.006 -3.881,-1.788c-1.123,-0.781 -2.085,-1.733 -2.886,-2.856c-0.801,-1.123 -1.455,-2.407 -1.963,-3.853l3.486,-1.435c0.41,1.269 0.962,2.402 1.656,3.398c0.693,0.996 1.499,1.841 2.417,2.535c0.918,0.693 1.938,1.225 3.061,1.596c1.123,0.371 2.319,0.557 3.589,0.557Z" style="fill-rule:nonzero;"/><path d="M36.744,8.648l9.281,23.625l8.157,-21.328l8.414,21.422l9.07,-23.719l2.531,0l-11.953,31.336l-1.547,0l-7.687,-19.382l-7.36,19.382l-1.781,0l-12.351,-31.336l5.226,0Z" style="fill-rule:nonzero;"/><rect x="78.463" y="8.648" width="5.227" height="31.078" style="fill-rule:nonzero;"/><path d="M92.127,8.648l5.344,0l12.093,23.836l0.258,0l11.86,-23.836l5.25,0l0,31.079l-5.25,0l0,-25.477l-0.164,0l-12.75,25.477l-1.079,0l-12.89,-25.266l-0.352,0l0,25.266l-2.32,0l0,-31.079Z" style="fill-rule:nonzero;"/><path d="M176.766,0.879l0,2.519l-14.063,0l0,36.329l-6.533,0l0,-36.329l-14.063,0l0,-2.519l34.659,0Z" style="fill-rule:nonzero;"/><path d="M203.707,8.648l0,2.016l-16.383,0l0,11.109l10.969,0l0,2.016l-10.969,0l0,13.922l16.383,0l0,2.016l-21.609,0l0,-31.079l21.609,0Z" style="fill-rule:nonzero;"/><path d="M222.012,7.945l14.625,31.782l-5.321,0l-4.734,-10.36l-13.336,0l-4.898,10.36l-2.625,0l14.976,-31.782l1.313,0Zm-7.852,19.407l11.461,0l-5.648,-12.305l-5.813,12.305Z" style="fill-rule:nonzero;"/><path d="M240.949,8.648l5.344,0l12.094,23.836l0.258,0l11.859,-23.836l5.25,0l0,31.079l-5.25,0l0,-25.477l-0.164,0l-12.75,25.477l-1.078,0l-12.891,-25.266l-0.351,0l0,25.266l-2.321,0l0,-31.079Z" style="fill-rule:nonzero;"/></g></svg>
+            </a>
         </div>
         <script>
 
@@ -188,6 +183,10 @@
                     var name = $(this).attr('name');
                     loadapp(name);
                 });
+
+                $('.info').on('click', function(e) {
+                    $('.expand').toggle();
+                });
             });
         </script>
         
@@ -215,7 +214,7 @@
                         //'https://s3.amazonaws.com/swim-team/01+-+Brick.m4a',
                         'https://s3.amazonaws.com/swim-team/01+-+Brick.mp3',
                     ], duration: '3:18'},
-                    {title: 'X', id: 'x', files: [
+                    {title: 'x', id: 'x', files: [
                         //'https://s3.amazonaws.com/swim-team/02+-+X.m4a',
                         'https://s3.amazonaws.com/swim-team/02+-+X.mp3',
                     ], duration: '2:58'},
@@ -243,7 +242,7 @@
                         //'https://s3.amazonaws.com/swim-team/08+-+Cardinal.m4a',
                         'https://s3.amazonaws.com/swim-team/08+-+Cardinal.mp3',
                     ], duration: '3:06'},
-                    {title: 'V', id: 'v', files: [
+                    {title: 'v', id: 'v', files: [
                         //'https://s3.amazonaws.com/swim-team/09+-+V.m4a',
                         'https://s3.amazonaws.com/swim-team/09+-+V.mp3',
                     ], duration: '5:03'},
