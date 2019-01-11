@@ -36,7 +36,7 @@ define([], function () {
 
         pm.animate = function(iter) {
 
-            iter += 3;
+            iter += 4;
             var iter_x = Math.sin(iter/2007) * 100 + Math.cos(Math.PI/3 + iter/2000)*50;
             var iter_y = Math.sin(iter/4040) * 100 + Math.cos(iter/2100 + iter/6300) * 100;
             var iter_cycle = Math.cos(iter/2830)*50 + Math.sin(iter/2300) * 20 + Math.sin(iter/1000) * 100;
