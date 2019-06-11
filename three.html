@@ -3,7 +3,7 @@
     <head>
         <link rel="shortcut icon" type="image/png" href="favicon.png"/>
         <meta charset="utf-8" />
-        <title>superfluid</title>
+        <title>superfluid 3d</title>
         <script src='libs/require-2.3.5.min.js'></script>
         <script src='libs/jquery-1.11.1.min.js'></script>
         <script src="libs/canvas.js"></script>
@@ -30,7 +30,7 @@
                 height: 30px;
             }
             #main {
-                position: absolute; top: 30px; bottom: 0; left: 0; right: 0;
+                position: absolute; top: 0; bottom: 0; left: 0; right: 0;
             }
             #main canvas {
                 margin: 0;
@@ -51,15 +51,6 @@
     </head>
     <body>
         <div id="wrapper">
-            <div id="nav">
-                <a name='growth' href=''>Growth</a>
-                <a name='squares' href=''>Squares</a>
-                <a name='circles' href=''>Circles</a>
-                <a name='fluid' href=''>Fluid</a>
-                <a name='dots' href=''>Dots</a>
-                <a name='dots3d' href=''>Dots3d</a>
-                
-            </div>
             <div id="main">
                 
             </div>
@@ -82,24 +73,14 @@
                 requirejs([file], function(lib) {
 
                     console.log("Loaded", file);
-                    if(app) app.stop();
-                    $('#main').html('').attr('class', name);
                     
-                    app = new lib($('#main').get(0));
                 });
             }
 
             $(document).ready(function(){
                  window.app = null;
 
-                loadapp('growth');
-
-
-                $('#nav a').on('click', function(e){
-                    e.preventDefault();
-                    var name = $(this).attr('name');
-                    loadapp(name);
-                });
+                loadapp('circles3d');
             });
         </script>
     </body>
