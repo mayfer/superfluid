@@ -78,9 +78,12 @@
             }
 
             $(document).ready(function(){
-                 window.app = null;
+                window.app = null;
 
-                loadapp('circles3d');
+                var hash = window.location.hash.replace(/#/, '') || 'circles3d';
+                
+
+                loadapp(hash);
             });
         </script>
     </body>
