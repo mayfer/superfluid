@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+        <meta charset="utf-8" />
+        <title>superfluid</title>
+        <script src='libs/require-2.3.5.min.js'></script>
+        <script src='libs/jquery-1.11.1.min.js'></script>
+        <script src="libs/canvas.js"></script>
+        
+        <style>
+            * { margin: 0; padding: 0; }
+            html, body {
+                width: 100%;
+                height: 100%;
+                background: #fff;
+            }
+
+            #wrapper {
+                position: relative;
+                height: 100%;
+
+                background: white;
+                    
+                    
+                    
+            }
+
+            #nav {
+                height: 30px;
+            }
+            #main {
+                position: absolute; top: 30px; bottom: 0; left: 0; right: 0;
+            }
+            #main canvas {
+                margin: 0;
+                padding: 0;
+                display: block;
+                height: 100%;
+                width: 100%;
+            }
+
+            .dots { background: #000; }
+
+            a {
+                font-size: 20px;
+                color: #000;
+            }
+        </style>
+        <link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="main">
+                
+            </div>
+        </div>
+        <script>
+
+            var extend = function(dest, from) {
+                var props = Object.getOwnPropertyNames(from);
+                props.forEach(function(name) {
+                    if (name in dest) {
+                        var destination = Object.getOwnPropertyDescriptor(from, name);
+                        Object.defineProperty(dest, name, destination);
+                    }
+                });
+                return dest;
+            };
+
+            function loadapp(name) {
+                var file = "" + name + ".js";
+                requirejs([file], function(lib) {
+
+                    console.log("Loaded", file);
+                    if(app) app.stop();
+                    $('#main').html('').attr('class', name);
+                    
+                    app = new lib($('#main').get(0));
+                });
+            }
+
+            $(document).ready(function(){
+                 window.app = null;
+
+                loadapp('illusion01');
+
+
+                $('#nav a').on('click', function(e){
+                    e.preventDefault();
+                    var name = $(this).attr('name');
+                    loadapp(name);
+                });
+            });
+        </script>
+    </body>
+</html>
