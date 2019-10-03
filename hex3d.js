@@ -56,7 +56,7 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 
                 renderer = new THREE.WebGLRenderer( { antialias: true } );
                 renderer.setPixelRatio( window.devicePixelRatio );
-                renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer.setSize( container.clientWidth, container.clientHeight );
                 container.appendChild( renderer.domElement );
 
                 const color = 0x333333;
@@ -112,17 +112,17 @@ scene.add(ambientLight);
 
 				event.preventDefault();
 
-				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				mouse.x = ( event.clientX / container.clientWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / container.clientHeight ) * 2 + 1;
 
 			}
 
 			function onWindowResize() {
 
-				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.aspect = container.clientWidth / container.clientHeight;
 				camera.updateProjectionMatrix();
 
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( container.clientWidth, container.clientHeight );
 
 			}
 

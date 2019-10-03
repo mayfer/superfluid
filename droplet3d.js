@@ -65,7 +65,7 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 
 
 				var material = new THREE.LineBasicMaterial( { color: 0xffffff } );
-				var pointcloud = new THREE.Line( geometry, material );
+				var pointcloud = new THREE.LineSegments( geometry, material );
 
 				return pointcloud;
 

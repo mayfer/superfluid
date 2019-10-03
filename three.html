@@ -17,30 +17,34 @@
             }
 
             #wrapper {
-                position: relative;
-                height: 100%;
 
                 background: white;
-                    
-                    
-                    
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+                height: 100%;
             }
 
             #nav {
-                height: 30px;
+                background: white;
+                flex: 0 0 200px;
+                padding: 30px;
+            }
+            #nav a {
+                display: block; line-height: 30px;
             }
             #main {
-                position: absolute; top: 0; bottom: 0; left: 0; right: 0;
+                flex: 1;
+                background: #000;
             }
             #main canvas {
                 margin: 0;
                 padding: 0;
                 display: block;
-                height: 100%;
                 width: 100%;
+                height: 100%;
             }
 
-            .dots { background: #000; }
 
             a {
                 font-size: 20px;
@@ -51,6 +55,20 @@
     </head>
     <body>
         <div id="wrapper">
+            <div id="nav">
+                <a href='#field3d'>field3d</a>
+                <a href='#pie3d'>pie3d</a>
+                <a href='#circles3d'>circles3d</a>
+                <a href='#circlewaves'>circlewaves</a>
+                <a href='#circlewaves2'>circlewaves2</a>
+                <a href='#circleripples'>circleripples</a>
+                <a href='#hex3d'>hex3d</a>
+                <a href='#hex'>hex</a>
+                <a href='#droplet3d'>droplet3d</a>
+                <a href='#lines3d'>lines3d</a>
+                <a href='#flower'>flower</a>
+                <a href='#cubes3d'>cubes3d</a>
+            </div>
             <div id="main">
                 
             </div>
@@ -80,10 +98,16 @@
             $(document).ready(function(){
                 window.app = null;
 
-                var hash = window.location.hash.replace(/#/, '') || 'circles3d';
+                var hash = window.location.hash.replace(/#/, "") || "circlewaves";
                 
 
                 loadapp(hash);
+
+                $('#nav a').click(function(e){
+                    e.preventDefault();
+                    window.location = window.location.href.split("#")[0] + $(this).attr('href');
+                    window.location.reload();
+                });
             });
         </script>
     </body>

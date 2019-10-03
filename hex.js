@@ -19,53 +19,60 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 			var threshold = 0.1;
 			var pointSize = 0.3;
 			var width = 50;
-			var length = 80;
+			var length = 50;
 			var rotateY = new THREE.Matrix4().makeRotationY( 0.005 );
             var geometry = new THREE.BufferGeometry();
 
 			init();
 			animate();
 
-			function generatePointcloud( color, width, length, i ) {
+			function generatePointCloudGeometry( color ) {
 
-				var numPoints = length * 2 * length * 2;
-
-				var positions = new Float32Array( numPoints * 3 );
-				var colors = new Float32Array( numPoints * 3 );
-				var velocities = new Float32Array( numPoints * 3 );
+                var size = 20;
+				var positions = new Float32Array( 3*Math.pow(size, 3) );
+				var colors = new Float32Array(  3*Math.pow(size, 3) );
+				var velocities = new Float32Array( 3*Math.pow(size, 3)  );
 
 				var k = 0;
 
-                for ( var i = -length; i < length; i ++ ) {
-                    for ( var j = -length; j < length; j ++ ) {
+				var i = 0;
 
-                        var u = i/10
-                        var v = j / length;
-                        var x = u
-                        var y = (Math.sin(i/20))*(  Math.sin( v * Math.PI * 8 ) ) / 5;
-                        var z = v
+                var center_x = 0;
+                var center_y = 0;
 
-                        positions[ 3 * k ] = x;
-                        positions[ 3 * k + 1 ] = y;
-                        positions[ 3 * k + 2 ] = z;
 
-                        //var intensity = ( y + 0.5 ) * 5;
-                        colors[ 3 * k ] =  0.5
-                        colors[ 3 * k + 1 ] = 0.7
-                        colors[ 3 * k + 2 ] = 0.9
+                for(var depth = -1; depth < 1; depth += 2/size) {
+                    for(var height = -1; height < 1; height += 2/size) {
+                        for(var width = -1; width < 1; width += 2/size) {
 
-                        k ++;
+                            positions[ 3 * k ] = width;
+                            positions[ 3 * k + 1 ] = height;
+                            positions[ 3 * k + 2 ] = depth;
 
+                            //var intensity = ( y + 0.5 ) * 5;
+                            colors[ 3 * k ] =  0.5
+                            colors[ 3 * k + 1 ] = 0.7
+                            colors[ 3 * k + 2 ] = 0.9
+
+                            k ++;
+                        }
                     }
                 }
-
+                                        
 				geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
 				geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
 				geometry.computeBoundingBox();
 
+				return geometry;
 
-				var material = new THREE.LineBasicMaterial( { color: 0xffffff } );
-				var pointcloud = new THREE.Line( geometry, material );
+			}
+
+			function generatePointcloud( color ) {
+
+				var geometry = generatePointCloudGeometry( color );
+
+				var material = new THREE.PointsMaterial( { size: 0.5, vertexColors: THREE.VertexColors } );
+				var pointcloud = new THREE.Points( geometry, material );
 
 				return pointcloud;
 
@@ -80,15 +87,15 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 
 				clock = new THREE.Clock();
 
-				camera = new THREE.PerspectiveCamera( 45, container.clientWidth / container.clientHeight, 1, 1000 );
-				camera.position.set( 10, 7, 0 );
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.set( 0, 20, 20 );
 				camera.lookAt( scene.position );
 				camera.updateMatrix();
 
 				//
 
-				var pcBuffer = generatePointcloud( new THREE.Color( 1, 1, 1 ), width, length );
-				pcBuffer.scale.set( 5, 5, 5 );
+				var pcBuffer = generatePointcloud( new THREE.Color( 1, 1, 1 ) );
+				pcBuffer.scale.set( 10, 10, 10 );
 				pcBuffer.position.set( 0, 0, 0 );
 				scene.add( pcBuffer );
 
@@ -98,7 +105,7 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( container.clientWidth, container.clientHeight );
+				renderer.setSize( window.innerWidth, window.innerHeight );
 				container.appendChild( renderer.domElement );
 
 				//
@@ -117,17 +124,17 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 
 				event.preventDefault();
 
-				mouse.x = ( event.clientX / container.clientWidth ) * 2 - 1;
-				mouse.y = - ( event.clientY / container.clientHeight ) * 2 + 1;
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
 			}
 
 			function onWindowResize() {
 
-				camera.aspect = container.clientWidth / container.clientHeight;
+				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
 
-				renderer.setSize( container.clientWidth, container.clientHeight );
+				renderer.setSize( window.innerWidth, window.innerHeight );
 
 			}
 
@@ -145,47 +152,24 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 
 			function render() {
 
-				//camera.applyMatrix( rotateY );
+				camera.applyMatrix( rotateY );
 				camera.updateMatrixWorld();
 
+				//raycaster.setFromCamera( mouse, camera );
 
+				//var intersections = raycaster.intersectObjects( pointclouds );
+				//intersection = ( intersections.length ) > 0 ? intersections[ 0 ] : null;
 
+                /*
+				for ( var i = 0; i < geometry.attributes.position.array.length/3; i ++ ) {
 
-				var positions = geometry.attributes.position.array;
+					//var sphere = spheres[ i ];
 
-				var k = 0;
+                    geometry.attributes.position.array[3 * i + 0] = 0.5*Math.sin(i * counter/1000)
+                    geometry.addAttribute( 'position', new THREE.BufferAttribute( geometry.attributes.position.array, 3 ) );
 
-                for ( var i = -length; i < length; i ++ ) {
-                    for ( var j = -length; j < length; j ++ ) {
-
-                        var sideways = j * 3
-                        var u = i/20
-                        var v = sideways / length;
-                        var x = u
-                        var y = Math.max(-1, 
-                            (
-                                + 2 * Math.sin(Math.cos(counter/((4 + Math.sin(counter/100))*130)) + i/3) // side wave
-                                + 2 * Math.sin(Math.cos(counter/100) + i/10 + Math.pow(x, 2)) // side wave
-                                + 2 * Math.sin(Math.cos(counter/100) + Math.pow(sideways/100, 2)) // side wave
-
-                                + 2  + Math.cos(sideways/10) * Math.sin(Math.sin(counter/100) + sideways/20) // fwd wave
-                                + Math.sin(Math.sin(counter/100)*Math.PI + sideways/5 + i/10) // fwd wave
-                                + Math.sin(Math.sin(counter/93) + sideways/12 + i/5) // fwd wave
-                            ) / 7
-                        / 20) * (3);
-                        var z = v
-
-                        positions[ 3 * k ] = x;
-                        positions[ 3 * k + 1 ] = y;
-                        positions[ 3 * k + 2 ] = z;
-
-                        k ++;
-
-                    }
-                }
-
-
-                geometry.attributes.position.needsUpdate = true;
+				}
+                */
 
 				toggle += clock.getDelta();
                 counter += 1;

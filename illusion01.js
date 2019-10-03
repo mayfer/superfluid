@@ -44,7 +44,7 @@ define([], function () {
 
         pm.animate = function(iter) {
 
-            iter += 4;
+            //iter += 4;
             pm.iter = iter;
 
             window.requestAnimationFrame(function() {
@@ -89,14 +89,15 @@ define([], function () {
             var maxlen = Math.min(pm.middle.y, pm.middle.x); 
             
             var layer = 0;
-            for(i = 0; i<maxlen+30; i+=30) {
-                for(rad = 0; rad<Math.PI*2-0.01; rad+=Math.PI/6) {
+            for(i = 100; i<maxlen+300; i+=30) {
+                layer += 1;
+                for(rad = 0; rad<Math.PI*2-0.01; rad+=Math.PI/32+i/2000) {
                     var circle = new pm.circle({
                         center: {
                             x: pm.middle.x + i* Math.sin(rad+i+pm.iter/100),
                             y: pm.middle.y + i* Math.cos(rad+i+pm.iter/100),
                         }, 
-                        radius: 10,
+                        radius: 5+layer/2,
                         radians: rad,
                         layer: layer,
                     });

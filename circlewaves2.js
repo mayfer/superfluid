@@ -1,4 +1,4 @@
-define(['libs/three.min.js'], function (THREE) {
+define(['libs/three.min.js', 'wavelib.js'], function (THREE, wavelib) {
 
 
     // stats.js - http://github.com/mrdoob/stats.js
@@ -24,7 +24,9 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
             var counter = 0;
             var incr = 0.10;
 
-            var numRings = 20;
+            var phase = 0;
+
+            var numRings = 16;
 
             var container = document.getElementById( 'main' );
 
@@ -35,7 +37,7 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
             }, 1000);
 
 			function generatePointcloud( width, numPoints, radius ) {
-                var color = new THREE.Color( 1/radius, 0.5/radius, 1/radius );
+                var color = new THREE.Color( 0.3/radius, 0.9/radius, 0.8/radius );
                 var geometry = new THREE.BufferGeometry();
 
 				var positions = new Float32Array( numPoints * 3 );
@@ -105,15 +107,19 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
     
 			function init() {
 
-
 				scene = new THREE.Scene();
 
 				clock = new THREE.Clock();
 
-				camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 1000 );
-				camera.position.set( 0, 10, 25 );
+
+                var camwidth = container.clientWidth/100;
+                var camheight = container.clientHeight/100;
+				camera = new THREE.OrthographicCamera( camwidth / - 2, camwidth / 2, camheight / 2, camheight / - 2, 1, 100 );
+                //camera = new THREE.PerspectiveCamera( 45, camwidth / camheight, 1, 1000 );
+				camera.position.set( 0, 0, 10 );
 				camera.lookAt( scene.position );
 				camera.updateMatrix();
+                
 
 
 				//
@@ -122,7 +128,7 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 
                 for(var i=0; i<numRings; i++) {
 
-                    var pcBuffer = generatePointcloud( width, 500, 0.1+i/20 );
+                    var pcBuffer = generatePointcloud( width, 500, 0.005+i/30 );
                     pcBuffer.scale.set( 5, 5, 5);
                     pcBuffer.position.set( 0, 0, 0 );
                     scene.add( pcBuffer );
@@ -144,6 +150,8 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 				//
 
 				window.addEventListener( 'resize', onWindowResize, false );
+
+                console.log(scene)
 
 			}
 
@@ -184,39 +192,69 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 					if ( object.isLine ) {
 
                         var multiplier
+                        /*
                         if(Math.sin(counter/200) > 0) {
-                            multiplier = i;
+                            multiplier = i / scene.children.length;
                         } else {
-                            multiplier = numRings - i;
+                            //multiplier = numRings - i;
+                            multiplier = i;
                         }
+                        */
+                        
+                        multiplier = i / scene.children.length;
 
                         var rotation = get_rotation_period(counter)
-						object.rotation.z = Math.abs(Math.pow(Math.sin(counter/200), 2)) * ( multiplier/4 );
+						//object.rotation.z = Math.abs(Math.pow(Math.sin(counter/200), 2)) * ( multiplier/1.8 );
+						//object.rotation.z += 0.001 * multiplier
+                        /*
 						object.rotation.y = Math.abs(Math.pow(Math.sin(counter/200), 2)) * ( multiplier );
 						object.rotation.x = Math.abs(Math.pow(Math.sin(counter/200), 2)) * ( multiplier/10 );
+                        */
 
 					}
 
 				}
 
-                var degree = Math.PI * 2 / (500);
+                phase += 0.01
+
+                var angle_slicing = 500;
+                var degree = Math.PI * 2 / (angle_slicing);
                 var deg = 0
                 for ( var jj = 0; jj < pointclouds.length; jj ++ ) {
                     var k = 0;
                     var pointcloud = pointclouds[jj];
-                    for ( var i = 0; i < 500; i ++) {
+                    for ( var i = 0; i < angle_slicing; i ++) {
                             var radius = pointcloud.geometry.attributes.customRadius.array;
-                            var x = Math.sin(deg) * (radius)
-                            var y = Math.cos(deg) * (radius);
-                            var multiplier;
-                            if(Math.sin(counter/200) > 0) {
-                                multiplier = jj;
-                            } else {
-                                multiplier = numRings - jj;
-                            }
-                            var curvature = Math.sin(deg*10) * Math.pow(multiplier/2, 2) * Math.cos(counter/400) / 200;
+                            var extension = 
+                                (jj/pointclouds.length) * (
+                                     Math.sin(phase       +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 2  +(Math.sin(deg * counter/500)))
+                                    + Math.sin(phase * 3  +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 4  +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 5  +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 6  +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 7  +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 8  +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 9  +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 10 +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 11 +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 12 +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 13 +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 14 +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 15 +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 16 +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 17 +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 18 +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 19 +(Math.sin(deg * counter/500))) 
+                                    + Math.sin(phase * 20 +(Math.sin(deg * counter/500))) 
+                                ) / 100
+                        
+                            ;
+                            var x = Math.sin(deg) * (radius) + Math.sin(deg) * extension;
+                            var y = Math.cos(deg) * (radius) + Math.cos(deg) * extension;
+                            var multiplier = 1;
 
-                            var z = curvature * Math.cos(deg*10) * Math.pow(Math.abs(Math.pow(Math.sin(counter/200), 2)), 0.25);
+                            var z = 0
 
                             pointcloud.geometry.attributes.position.array[ 3 * k ] = x;
                             pointcloud.geometry.attributes.position.array[ 3 * k + 1 ] = y;
@@ -224,7 +262,7 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 
 
                             k ++;
-                            deg = degree * i;
+                            deg += degree;
                     }
                     pointcloud.geometry.attributes.position.needsUpdate = true;
                 }
