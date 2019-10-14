@@ -26,7 +26,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ){
 define(['libs/three.min.js'], function (THREE) {
     var container = document.getElementById('main');
 
-    var fragTest = `
+    var frag_creation = `
     // http://www.pouet.net/prod.php?which=57245
         uniform float iGlobalTime;
         uniform vec2 iResolution;
@@ -57,10 +57,42 @@ define(['libs/three.min.js'], function (THREE) {
         void main(){
             mainImage(gl_FragColor, gl_FragCoord.xy );
         }
+    `;
+
+    var fragBackground = `
+        uniform float iGlobalTime;
+        uniform vec2 iResolution;
+        uniform vec4      iMouse;
+        uniform sampler2D iChannel0;
+        varying vec2 fragCoord;
+        varying vec2 vUv;
+
+		#define t iGlobalTime
+		#define r iResolution.xy
+
+		void mainImage( out vec4 fragColor, in vec2 fragCoord ){
+			vec3 c;
+			float l,z=t;
+			for(int i=0;i<3;i++) {
+				vec2 uv,p=fragCoord.xy/r;
+				uv=p;
+				p-=.5;
+				p.x*=r.x/r.y;
+				z+=.5; // changes color
+				l=length(p);
+				uv+=sin(z);
+				c[i]=length(uv);
+			}
+			fragColor=vec4(c/l,t);
+		}
+
+        void main(){
+            mainImage(gl_FragColor, gl_FragCoord.xy );
+        }
+    
     `
 
-    var frag1 = `
-
+    var fragTest = `
         uniform float iGlobalTime;
         uniform vec2 iResolution;
         uniform vec4      iMouse;
@@ -68,104 +100,32 @@ define(['libs/three.min.js'], function (THREE) {
         varying vec2 fragCoord;
         varying vec2 vUv;
 
-        vec2 cmul( vec2 a, vec2 b )  { return vec2( a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x ); }
-        vec2 csqr( vec2 a )  { return vec2( a.x*a.x - a.y*a.y, 2.*a.x*a.y  ); }
-        vec3 dmul( vec3 a, vec3 b )  {
-            float r = length(a);
-            b.xy=cmul(normalize(a.xy), b.xy);
-            b.yz=cmul(normalize(a.yz), b.yz);
-            return r*b;
-        }
-        vec3 pow4( vec3 z){
-            z=dmul(z,z);return dmul(z,z);
-        }
-        vec3 pow3( vec3 z){
-            float r2 = dot(z,z);
-            vec2 a = z.xy;a=csqr(a)/dot( a,a);
-            vec2 b = z.yz;b=csqr(b)/dot( b,b); 
-            vec2 c = z.xz;c=csqr(c)/dot( c,c);
-            z.xy = cmul(a,z.xy);   
-            z.yz = cmul(b,z.yz);      
-            z.xz = cmul(c,z.xz);
-            return r2*z;
-        }
-        mat2 rot(float a) {
-            return mat2(cos(a),sin(a),-sin(a),cos(a));  
-        }
-        float zoom=4.;
-        float field(in vec3 p) {
-            float res = 0.;
-            vec3 c = p;
-            for (int i = 0; i < 10; ++i) {
-                p = abs(p) / dot(p,p) -1.;
-                p = dmul(p,p)+.7;
-                res += exp(-6. * abs(dot(p,c)-.15));
-            }
-            return max(0., res/3.);
-        }
-        vec3 raycast( in vec3 ro, vec3 rd )
-        {
-            float t = 6.0;
-            float dt = .05;
-            vec3 col= vec3(0.);
-            for( int i=0; i<64; i++ )
-            {
-                float c = field(ro+t*rd);               
-                t+=dt/(.35+c*c);
-                c = max(5.0 * c - .9, 0.0);
-                col = .97*col+ .08*vec3(0.5*c*c*c, .6*c*c, c);
-            }
-            return col;
-        }
-        void main()
-        {
-            float time = iGlobalTime;
-            vec2 q = fragCoord.xy / iResolution.xy;
-            vec2 p = -1.0 + 2.0 * q;
-            p.x *= iResolution.x/iResolution.y;
-            vec2 m = vec2(0.);
-            if( iMouse.z>0.0 )m = iMouse.xy/iResolution.xy*3.14;
-            m-=.5;
-            vec3 ro = zoom*vec3(1.);
-            ro.yz*=rot(m.y);
-            ro.xz*=rot(m.x+ 0.1*time);
-            vec3 ta = vec3( 0.0 , 0.0, 0.0 );
-            vec3 ww = normalize( ta - ro );
-            vec3 uu = normalize( cross(ww,vec3(0.0,1.0,0.0) ) );
-            vec3 vv = normalize( cross(uu,ww));
-            vec3 rd = normalize( p.x*uu + p.y*vv + 4.0*ww );
-            vec3 col = raycast(ro,rd);
-            col =  .5 *(log(1.+col));
-            col = clamp(col,0.,1.);
-            gl_FragColor = vec4( sqrt(col), 1.0 );
-        }
+		#define t iGlobalTime
+		#define r iResolution.xy
 
+		void mainImage( out vec4 fragColor, in vec2 fragCoord ){
+			vec3 c;
+			float l,z=t;
+			for(int i=0;i<3;i++) {
+				vec2 uv,p=fragCoord.xy/r;
+				uv=p;
+				p-=.5;
+				p.x*=r.x/r.y;
+				p.y*=1.5;
+				p.x*=1.5;
+				z+=0.1; // changes color
+				l=length(p);
+				p=p*sin(l*10.);
+				c[i]=cos(z+length(p+sin(cos(t)/4.))*10.);
+			}
+			fragColor=vec4(c/l,t);
+		}
 
-    `;
-
-    var frag2 = `
-        uniform float iGlobalTime;
-        uniform vec2 iResolution;
-        uniform vec4      iMouse;
-        uniform sampler2D iChannel0;
-        varying vec2 fragCoord;
-        varying vec2 vUv;
-        void main()
-        {
-            float k=0.;
-            vec3 d =  vec3(fragCoord,1.0)/1.0-.5, o = d, c=k*d, p;
-            for( int i=0; i<99; i++ ){
-                p = o+sin(iGlobalTime*.1);
-                for (int j = 0; j < 10; j++) 
-                    p = abs(p.zyx-.4) -.7,k += exp(-6. * abs(dot(p,o)));
-                k/=3.;
-                o += d *.05*k;
-                c = .97*c + .1*k*vec3(k*k,k,1);
-            }
-            c =  .4 *log(1.+c);
-            gl_FragColor.rgb = c;
+        void main(){
+            mainImage(gl_FragColor, gl_FragCoord.xy );
         }
-    `;
+    
+    `
 
     var fragGeneral = `
         attribute vec3 in_Position;
@@ -219,7 +179,7 @@ define(['libs/three.min.js'], function (THREE) {
     (function() {
       var gameObject = function(name, x, y, z, col, rx, ry) {
         this.name = name
-        this.geometry = new THREE.BoxGeometry(25, 15, 0);
+        this.geometry = new THREE.BoxGeometry(10, 10, 0);
         uniforms = {
           iGlobalTime: {
             type: "f",
@@ -250,11 +210,10 @@ define(['libs/three.min.js'], function (THREE) {
         this.vel = [0, 0, 0]
       }
       gameObject.prototype.update = function() {
-        this.obj.rotation.x += this.rx
-        this.obj.rotation.y += this.ry
-        this.obj.position.x += this.vel[0]
-        this.obj.position.y += this.vel[1]
-        this.obj.position.z += this.vel[2]
+          /*
+        this.obj.rotation.x += this.rx*100
+        this.obj.rotation.y += this.ry*100
+        */
         var elapsedMilliseconds = Date.now() - this.obj.startTime;
         var elapsedSeconds = elapsedMilliseconds / 1000.;
         this.obj.uniforms.iGlobalTime.value = elapsedSeconds;
