@@ -115,10 +115,10 @@ define(['libs/three.min.js'], function (THREE) {
 				p.x*=1.5;
 				z+=0.1; // changes color
 				l=length(p);
-				p=p*sin(l*10.);
-				c[i]=cos(z+length(p+sin(cos(t)/4.))*10.);
+				p=p*sin(l*5.);
+				c[i]=sin(z+length(p)*10.+cos(z/0.9));
 			}
-			fragColor=vec4(c/l,t);
+			fragColor=vec4(c,0.);
 		}
 
         void main(){
@@ -216,7 +216,7 @@ define(['libs/three.min.js'], function (THREE) {
     (function() {
       var gameObject = function(name, x, y, z, col, rx, ry) {
         this.name = name
-        this.geometry = new THREE.BoxGeometry(10, 10, 0);
+        this.geometry = new THREE.BoxGeometry(20, 20, 0);
         uniforms = {
           iGlobalTime: {
             type: "f",

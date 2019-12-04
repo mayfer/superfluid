@@ -25,73 +25,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ){
 
 define(['libs/three.min.js'], function (THREE) {
     var container = document.getElementById('main');
-
-    var frag_creation = `
-    // http://www.pouet.net/prod.php?which=57245
-        uniform float iGlobalTime;
-        uniform vec2 iResolution;
-        uniform vec4      iMouse;
-        uniform sampler2D iChannel0;
-        varying vec2 fragCoord;
-        varying vec2 vUv;
-
-		#define t iGlobalTime
-		#define r iResolution.xy
-
-		void mainImage( out vec4 fragColor, in vec2 fragCoord ){
-			vec3 c;
-			float l,z=t;
-			for(int i=0;i<3;i++) {
-				vec2 uv,p=fragCoord.xy/r;
-				uv=p;
-				p-=.5;
-				p.x*=r.x/r.y;
-				z+=.07;
-				l=length(p);
-				uv+=p/l*(sin(z)+1.)*abs(sin(l*9.-z*2.));
-				c[i]=.01/length(abs(mod(uv,1.)-.5));
-			}
-			fragColor=vec4(c/l,t);
-		}
-
-        void main(){
-            mainImage(gl_FragColor, gl_FragCoord.xy );
-        }
-    `;
-
-    var fragBackground = `
-        uniform float iGlobalTime;
-        uniform vec2 iResolution;
-        uniform vec4      iMouse;
-        uniform sampler2D iChannel0;
-        varying vec2 fragCoord;
-        varying vec2 vUv;
-
-		#define t iGlobalTime
-		#define r iResolution.xy
-
-		void mainImage( out vec4 fragColor, in vec2 fragCoord ){
-			vec3 c;
-			float l,z=t;
-			for(int i=0;i<3;i++) {
-				vec2 uv,p=fragCoord.xy/r;
-				uv=p;
-				p-=.5;
-				p.x*=r.x/r.y;
-				z+=.5; // changes color
-				l=length(p);
-				uv+=sin(z);
-				c[i]=length(uv);
-			}
-			fragColor=vec4(c/l,t);
-		}
-
-        void main(){
-            mainImage(gl_FragColor, gl_FragCoord.xy );
-        }
-    
-    `
-
     var fragTest = `
         uniform float iGlobalTime;
         uniform vec2 iResolution;
@@ -105,57 +38,20 @@ define(['libs/three.min.js'], function (THREE) {
 
 		void mainImage( out vec4 fragColor, in vec2 fragCoord ){
 			vec3 c;
-			float l,z=t;
-			for(int i=0;i<3;i++) {
-				vec2 uv,p=fragCoord.xy/r;
-				uv=p;
-				p-=.5;
-				p.x*=r.x/r.y;
-				p.y*=1.5;
-				p.x*=1.5;
-				z+=0.1; // changes color
-				l=length(p);
-				p=p*sin(l*10.);
-				c[i]=cos(z+length(p+sin(cos(t)/4.))*10.);
+			float l, z = t;
+            float fr = 0.;
+			for(int i = 0; i < 3; i++) {
+				vec2 uv, p = fragCoord.xy/r;
+				uv = p;
+				p -= .5;
+				l = length(p);
+				c[i] = cos(sin(length(p.x) * 10.) * (sin(t/8.) * 20.) * cos(t/8.))
+                    * cos(length(p.y) * 10. * sin(t/8.))
+                    * 2. + cos(t/4.);
+                c[i] += fr;
+                fr += sin((p.x / cos(p.x)*sin(p.y + sin(t))) * 10.) / 2.;
 			}
-			fragColor=vec4(c/l,t);
-		}
-
-        void main(){
-            mainImage(gl_FragColor, gl_FragCoord.xy );
-        }
-    
-    `
-
-
-    var fragNew = `
-        uniform float iGlobalTime;
-        uniform vec2 iResolution;
-        uniform vec4      iMouse;
-        uniform sampler2D iChannel0;
-        varying vec2 fragCoord;
-        varying vec2 vUv;
-
-		#define t iGlobalTime
-		#define r iResolution.xy
-
-		void mainImage( out vec4 fragColor, in vec2 fragCoord ){
-			vec3 c;
-			float l,z=t;
-			for(int i=0;i<3;i++) {
-				vec2 uv,p=fragCoord.xy/r;
-				uv=p;
-				p-=.5;
-				p.x*=r.x/r.y;
-				p.y*=1.5;
-				p.x*=1.5;
-				z+=1.4*sin(t); // changes color
-				l=length(p);
-				p.x=length(p.y)*sin(l*10.);
-				p.y=length(p.x)*cos(l*10.);
-				c[i]=cos(z+length(p+sin(cos(t)/40.))*sin(t/5.)*100.);
-			}
-			fragColor=vec4(c/l,t);
+			fragColor = vec4(c, 1.);
 		}
 
         void main(){
@@ -216,7 +112,7 @@ define(['libs/three.min.js'], function (THREE) {
     (function() {
       var gameObject = function(name, x, y, z, col, rx, ry) {
         this.name = name
-        this.geometry = new THREE.BoxGeometry(10, 10, 0);
+        this.geometry = new THREE.BoxGeometry(20, 20, 0);
         uniforms = {
           iGlobalTime: {
             type: "f",
