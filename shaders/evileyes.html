@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Moire</title>
+
+        <script type="text/javascript" src="GlslCanvas.js"></script>
+
+        <style>
+            body {
+                background: #101515;
+            }
+
+            #glslCanvas {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+            }
+
+        </style>
+
+    </head>
+    <body>
+        <canvas id="glslCanvas" data-fragment="
+
+
+#define PI 3.14159265359
+#define TWO_PI 6.28318530718
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform float u_time;
+
+
+float csin(float x) {
+    return sin(sin(x));
+}
+
+float angle(vec2 st) {
+    float angle = atan((st.y - 0.5)*2.0, (st.x - 0.5)*2.0);
+    return angle;
+}
+
+float angle_percentage(float angle) {
+    float ap = (1.0 + (angle / PI) ) / 2.0;
+    return ap;
+}
+
+float zto_sin(float x) {
+    return (sin(x) + 1.0)/2.0;
+}
+
+float grid(vec2 st) {
+    float curl = sin(u_time/3.) * sin(u_time) + 20.;
+
+    float y_boy = ( sin(st.y * TWO_PI) * sin(st.y * 5.) );
+    float x_boy = sin(st.x * TWO_PI);
+    float x_add = sin(st.x * 5.0);
+    float combo = ( y_boy + sin(u_time/3.)*x_boy + cos(u_time/6.)*x_add);
+
+    return sin( curl * combo);
+}
+
+void main() {
+	vec2 st = gl_FragCoord.xy/u_resolution.xy;
+    vec2 coord = 2.0 * (st - 0.5);
+
+    float brightness = grid(coord);
+
+    vec4 color = vec4(vec3(brightness), 1.0 );
+    for(int i=0; i<3; ++i)
+    {
+      color[i] += float(i) * sin( st.y /10.) * 10. + float(2-i) * 0.3 * sin( st.x /10.) * 10.;
+    }
+
+	gl_FragColor = color;
+
+}
+
+" width="800" height="600"></canvas>
+    </body>
+
+    <script>
+        var canvas = document.getElementById("glslCanvas");
+        var sandbox = new GlslCanvas(canvas);
+        var texCounter = 0;
+        var sandbox_content = "";
+        var sandbox_title = "";
+        var sandbox_author = "";
+        var sandbox_thumbnail = ""; 
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+
+    </script>
+</html>
