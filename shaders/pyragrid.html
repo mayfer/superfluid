@@ -56,7 +56,7 @@ float zto_sin(float x) {
 
 void main() {
 	vec2 st = gl_FragCoord.xy/u_resolution.xy;
-    vec2 ast = vec2(mod(gl_FragCoord.x+u_time, 300.)-150., mod(gl_FragCoord.y-u_time, 300.)-150.);
+    vec2 ast = vec2(mod(gl_FragCoord.x, 300.)-150., mod(gl_FragCoord.y, 300.)-150.);
     float color = zto_sin(u_time + angle(ast) + (st.x-150.)*30.);
     
     vec3 colorvec = vec3(color + sin(st.x + u_time)/10., color, color + cos(st.x + u_time)/10.);
