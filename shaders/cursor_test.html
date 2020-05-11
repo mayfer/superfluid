@@ -140,13 +140,20 @@
                     }
                     return e.target;
                 }
+                function getTouchMousePos(e) {
+                    if (e.touches) {
+                      return {clientX: e.touches[0].pageX, clientY: e.touches[0].pageY};
+                    }
+                    return e;
+                }
                 const movehandler = e => {
                     e.preventDefault();
                     const canvas = getTouchMouseTargetElement(e);
+                    const pos = getTouchMousePos(e);
                     const rect = canvas.getBoundingClientRect();
 
-                    const x = (e.clientX - rect.left) * canvas.width / rect.width;
-                    const y = (e.clientY - rect.top)  * canvas.height / rect.height;
+                    const x = (pos.clientX - rect.left) * canvas.width / rect.width;
+                    const y = (pos.clientY - rect.top)  * canvas.height / rect.height;
                     mouse = {x, y: canvas.height - y};
                 };
                 canvas.addEventListener('mousemove', movehandler);
