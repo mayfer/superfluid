@@ -134,14 +134,23 @@
 				resolutionLocation = gl.getUniformLocation( currentProgram, 'resolution' );
                 mouseLocation = gl.getUniformLocation( currentProgram, 'mouse' );
  
-                canvas.addEventListener('mousemove', e => {
-                    const canvas = e.target;
+                function getTouchMouseTargetElement(e) {
+                    if (e.touches) {
+                      return document.elementFromPoint(e.touches[0].pageX, e.touches[0].pageY);
+                    }
+                    return e.target;
+                }
+                const movehandler = e => {
+                    e.preventDefault();
+                    const canvas = getTouchMouseTargetElement(e);
                     const rect = canvas.getBoundingClientRect();
 
                     const x = (e.clientX - rect.left) * canvas.width / rect.width;
                     const y = (e.clientY - rect.top)  * canvas.height / rect.height;
                     mouse = {x, y: canvas.height - y};
-                });
+                };
+                canvas.addEventListener('mousemove', movehandler);
+                canvas.addEventListener('touchmove', movehandler);
 			}
  
 			function createProgram( vertex, fragment ) {
