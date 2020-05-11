@@ -158,6 +158,8 @@
                 };
                 canvas.addEventListener('mousemove', movehandler);
                 canvas.addEventListener('touchmove', movehandler);
+                canvas.addEventListener('touchstart', movehandler);
+                canvas.addEventListener('touchend', movehandler);
 			}
  
 			function createProgram( vertex, fragment ) {
