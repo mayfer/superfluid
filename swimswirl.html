@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="shortcut icon" type="image/png" href="/assets/favicon.png"/>
+        <meta charset="utf-8" />
+        <title>Swim Team &bull; V</title>
+        <meta name="description" content="Swim Team is a rock trio from Vancouver, BC consisting of members Dorothy Neufeld, Murat Ayfer, and Nick Short. V is the third release, self-recorded and produced from Sept 2017 - Oct 2018.">
+        <meta property="og:image" content="/assets/cover-notitle.png">
+        <meta property="og:image:type" content="image/png">
+        <meta property="og:image:width" content="1400">
+        <meta property="og:image:height" content="1400">
+        <script src="libs/howler.core.min.js"></script>
+        <script src='libs/require-2.3.5.min.js'></script>
+        <script src='libs/jquery-1.11.1.min.js'></script>
+        <script src="libs/canvas.js"></script>
+        <!--
+
+                                                                 ^^
+                ^^      ..                                       ..
+                        []                                       []
+                      .:[]:_          ^^                       ,:[]:.
+                    .: :[]: :-.                             ,-: :[]: :.
+                  .: : :[]: : :`._                       ,.': : :[]: : :.
+                .: : : :[]: : : : :-._               _,-: : : : :[]: : : :.
+            _..: : : : :[]: : : : : : :-._________.-: : : : : : :[]: : : : :-._
+            _:_:_:_:_:_:[]:_:_:_:_:_:_:_:_:_:_:_:_:_:_:_:_:_:_:_:[]:_:_:_:_:_:_
+            !!!!!!!!!!!![]!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!![]!!!!!!!!!!!!!
+            ^^^^^^^^^^^^[]^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[]^^^^^^^^^^^^^
+                        []                                       []
+                        []                                       []
+                        []                                       []
+             ~~^-~^_~^~/  \~^-~^~_~^-~_^~-^~_^~~-^~_~^~-~_~-^~_^/  \~^-~_~^-~~-
+            ~ _~~- ~^-^~-^~~- ^                    ^- _~~_~-^_ ~^-^~~-_^-~ ~^
+               ~ ^- _~~_-  ~~   album art by murat  -  ~ _  ~~^  - ~_   - ~^_~
+                 ~-  ^_  ~^ -_~~_ _ - ~^~ _   _~ ~-  _ ~~^ - _ ~ - _ ~~^ -
+                    ~^ -_ ~^^      ~^~                 ~- _ ~^ _ -  ~ ^-
+                        ~^~ -  ascii art not by murat_- ~_ - ~  ~^_-
+                            ~ ~- ^~ -  ~^ -  ~ ^~ - ~~  ^~ - ~
+
+        -->
+        <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            * { margin: 0; padding: 0; }
+            html, body {
+                width: 100%;
+                height: 100%;
+                background: #fff;
+                font-family: monospace;
+            }
+
+            #wrapper {
+                position: relative;
+                height: 100%;
+
+                background: white;
+            }
+
+            #square {
+                position: relative;
+                height: 100%;
+                width: 100%;
+            }
+            #main {
+                position: absolute; top: 50px; bottom: 50px; left: 50px; right: 50px;
+            }
+            #frame {
+                display: block;
+                height: 100%; width: 100%;
+            }
+
+            .dots { background: #000; }
+
+            @media screen and (max-width: 600px){
+                #main {
+                    top: 20px; bottom: 20px; left: 20px; right: 20px;
+                }
+                #tracks .track { min-width: 160px; }
+            }
+
+        </style>
+    </head>
+    <body>
+        </div>
+        <div id="wrapper">
+            <div id="square">
+                <div id="main">
+                    <div id="frame"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+
+            var extend = function(dest, from) {
+                var props = Object.getOwnPropertyNames(from);
+                props.forEach(function(name) {
+                    if (name in dest) {
+                        var destination = Object.getOwnPropertyDescriptor(from, name);
+                        Object.defineProperty(dest, name, destination);
+                    }
+                });
+                return dest;
+            };
+
+            function loadapp(name) {
+                var file = "" + name + ".js";
+                requirejs([file], function(lib) {
+                    app = new lib($('#frame').get(0));
+                });
+            }
+
+            $(document).ready(function(){
+                window.app = null;
+
+                var maxlenpx = Math.min($('#square').innerHeight(), $('#square').innerWidth());
+                $('#square').css('width', parseInt(maxlenpx)+"px");
+                $('#square').css('height', parseInt(maxlenpx)+"px");
+
+                window.app = loadapp('swimswirl');
+            });
+        </script>
+        
+        <script>
+            $(document).ready(function () {
+
+                var resize = function() {
+                    if (window.app) window.app.resize();
+                }
+                resize();
+                
+                window.addEventListener('resize', function(e){
+                    resize()
+                });
+
+            });
+        </script>
+        
+    </body>
+</html>
