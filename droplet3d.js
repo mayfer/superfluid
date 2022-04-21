@@ -104,7 +104,7 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 				//
 
 				stats = new Stats();
-				container.appendChild( stats.dom );
+				//container.appendChild( stats.dom );
 
 				//
 

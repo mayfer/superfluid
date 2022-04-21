@@ -17,26 +17,12 @@
 				width: 100%;
 				height: 100%;
 			}
-			#info {
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				text-align: center;
-				padding: 300px;
-				font-size: 30px;
-				color: #fff;
-				text-shadow: 0 0 20px #fff;
-				pointer-events: none;
-				background: rgba(0, 0, 0, 0.5);
-			}
 		</style> 
 	</head> 
 	<body> 
  
 		<canvas></canvas>
-		<div id="info">HELLO WORLD</div> 
+		<div id="info"></div> 
  
 		<script id="vs" type="x-shader/vertex"> 
  
@@ -53,22 +39,19 @@
 		<script id="fs" type="x-shader/fragment"> 
  
 			uniform float time;
-            uniform vec2 mouse;
 			uniform vec2 resolution;
  
 			void main( void ) {
  
-				vec2 position = - 1.0 + 2.0 * gl_FragCoord.xy / resolution.xy;
-				float ttime = time / 5.;
-                float redsinval = position.x * position.y + ttime / 5.0;
-				float red = abs( sin( redsinval ) * sin(redsinval*1.4) / 2.0);
-                float greenval = abs( sin( position.x * position.y + ttime / 4.0 ) *  - sin(position.x * position.y * 10.0 + ttime) / 2.0);
-				float green = greenval;
-                float someval = abs( sin( position.x * position.y + ttime / 3.0 ) );
-				float blue = someval + sin(someval);
-                float proximity = 100. / distance(gl_FragCoord.xy, mouse.xy);
+				float box_size = 20.;
+				float ttime = time;
+				vec2 box_position = sin(ttime/10.) * vec2(mod(gl_FragCoord.x, box_size), mod(gl_FragCoord.y, box_size));
+				vec2 position = - 1.0 + 2.0 * box_position / vec2(box_size);
 
-				gl_FragColor = vec4( red + proximity/2.0, green + proximity/2.0, blue * proximity*4.0, 1.0 );
+				float red = abs( sin( position.x * position.y + ttime / 5.0 ) );
+				float green = abs( sin( position.x * position.y + ttime / 4.0 ) );
+				float blue = abs( sin( position.x * position.y + ttime / 3.0 ) );
+				gl_FragColor = vec4( red, green, blue, 1.0 ) / 2.;
  
 			}
  
@@ -105,9 +88,7 @@
 			                    time        : 0, 
 			                    screenWidth : 0, 
 			                    screenHeight: 0 };
-
-            var mouse =  {x: 0, y: 0};
-
+ 
 			init();
 			animate();
  
@@ -147,34 +128,7 @@
 
 				timeLocation = gl.getUniformLocation( currentProgram, 'time' );
 				resolutionLocation = gl.getUniformLocation( currentProgram, 'resolution' );
-                mouseLocation = gl.getUniformLocation( currentProgram, 'mouse' );
  
-                function getTouchMouseTargetElement(e) {
-                    if (e.touches) {
-                      return document.elementFromPoint(e.touches[0].pageX, e.touches[0].pageY);
-                    }
-                    return e.target;
-                }
-                function getTouchMousePos(e) {
-                    if (e.touches) {
-                      return {clientX: e.touches[0].pageX, clientY: e.touches[0].pageY};
-                    }
-                    return e;
-                }
-                const movehandler = e => {
-                    e.preventDefault();
-                    const canvas = getTouchMouseTargetElement(e);
-                    const pos = getTouchMousePos(e);
-                    const rect = canvas.getBoundingClientRect();
-
-                    const x = (pos.clientX - rect.left) * canvas.width / rect.width;
-                    const y = (pos.clientY - rect.top)  * canvas.height / rect.height;
-                    mouse = {x, y: canvas.height - y};
-                };
-                canvas.addEventListener('mousemove', movehandler);
-                canvas.addEventListener('touchmove', movehandler);
-                canvas.addEventListener('touchstart', movehandler);
-                canvas.addEventListener('touchend', movehandler);
 			}
  
 			function createProgram( vertex, fragment ) {
@@ -269,7 +223,6 @@
  
 				gl.uniform1f( timeLocation, parameters.time / 1000 );
 				gl.uniform2f( resolutionLocation, parameters.screenWidth, parameters.screenHeight );
-                gl.uniform2f( mouseLocation, parseFloat(mouse.x), parseFloat(mouse.y));
  
 				// Render geometry
  

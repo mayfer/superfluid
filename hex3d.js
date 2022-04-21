@@ -66,8 +66,8 @@ v){c=Math.min(c,f);g=Math.max(g,f);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,
 
 				//
 
-				stats = new Stats();
-				container.appendChild( stats.dom );
+				// stats = new Stats();
+				// container.appendChild( stats.dom );
                 
                 var pointLight = new THREE.PointLight( 0xffffff, 1, 100 );
                 pointLight.position.set( 0, 0, 4 );
@@ -131,7 +131,7 @@ scene.add(ambientLight);
 				requestAnimationFrame( animate );
 
 				render();
-				stats.update();
+				// stats.update();
 
 			}
 
